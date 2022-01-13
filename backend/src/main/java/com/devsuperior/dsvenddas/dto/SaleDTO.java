@@ -1,35 +1,38 @@
-package com.devsuperior.dsvenddas.entities;
+package com.devsuperior.dsvenddas.dto;
 
-import javax.persistence.*;
+import com.devsuperior.dsvenddas.entities.Sale;
+
+import java.io.Serializable;
 import java.time.LocalDate;
 
-@Entity
-@Table(name = "tb_sales")
-public class Sale {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class SaleDTO implements Serializable {
     private Long id;
-
     private Integer visited;
     private Integer deals;
     private Double amount;
     private LocalDate date;
 
-    @ManyToOne
-    @JoinColumn(name = "seller_id")
-    private Seller seller;
+    private SellerDTO seller;
 
-    public Sale() {
+    public SaleDTO() {
     }
 
-    public Sale(Integer visited, Integer deals,
-                Double amount, LocalDate date, Seller seller) {
+    public SaleDTO(Integer visited, Integer deals, Double amount,
+                   LocalDate date, SellerDTO seller) {
         this.visited = visited;
         this.deals = deals;
         this.amount = amount;
         this.date = date;
         this.seller = seller;
+    }
+
+    public SaleDTO(Sale entity) {
+        this.id = entity.getId();
+        this.visited = entity.getVisited();
+        this.deals = entity.getDeals();
+        this.amount = entity.getAmount();
+        this.date = entity.getDate();
+        this.seller = new SellerDTO(entity.getSeller());
     }
 
     public Long getId() {
@@ -72,7 +75,12 @@ public class Sale {
         this.date = date;
     }
 
-    public Seller getSeller() {
+    public SellerDTO getSeller() {
         return seller;
     }
+
+    public void setSeller(SellerDTO seller) {
+        this.seller = seller;
+    }
 }
+
